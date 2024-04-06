@@ -1,0 +1,13 @@
+- hosts: localhost
+  tasks:
+  - name: "Install all the software"
+    become: true
+    apt:
+      name: "{{ packages }}"
+      state: present
+    vars:
+      packages:
+      - ripgrep
+      - xclip
+      - jq
+      - tldr

@@ -1,0 +1,70 @@
+- hosts: localhost
+  tasks:
+
+  - name: "Add nodejs apt key"
+    apt_key:
+      url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+      state: present
+    tags:
+      - install
+      - node
+
+  - name: Install the nodejs LTS repos
+    apt_repository:
+      repo: "deb https://deb.nodesource.com/node_{{ NODEJS_VERSION }}.x {{ ansible_distribution_release }} main"
+      state: present
+      update_cache: yes
+    tags:
+      - install
+      - node
+
+  - name: "Install nodejs"
+    apt:
+      update_cache: yes
+      name: nodejs
+      state: present
+    tags:
+      - install
+      - node
+
+  - name: Install Yarn
+    npm:
+      name: yarn
+      global: yes
+    tags:
+      - install
+      - node
+
+  - name: Install eslint
+    npm:
+      name: eslint
+      global: yes
+    tags:
+      - install
+      - node
+
+  - name: Install Typescript server
+    npm:
+      name: typescript-language-server
+      global: yes
+    tags:
+      - install
+      - node
+
+  - name: Install Typescript
+    npm:
+      name: typescript
+      global: yes
+    tags:
+      - install
+      - node
+
+  - name: Install TS-Node
+    npm:
+      name: ts-node
+      global: yes
+    tags:
+      - install
+      - node
+
+
