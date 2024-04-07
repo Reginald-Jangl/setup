@@ -1,0 +1,20 @@
+- hosts: localhost
+  tasks:
+    - debug:
+        msg: setup all
+
+# Basic Setup
+- import_playbook: core.yml
+- import_playbook: common.yml
+- import_playbook: dev-env.yml
+- import_playbook: zsh.yml
+
+# Core Tools
+- import_playbook: tmux.yml
+- import_playbook: nvim.yml
+- import_playbook: fzf.yml
+
+# Languages 
+- import_playbook: go.yml
+- import_playbook: rust.yml
+- import_playbook: node.yml

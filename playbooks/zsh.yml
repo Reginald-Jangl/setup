@@ -6,7 +6,7 @@
 
   - name: Ensure Zsh with dependencies are installed
     apt:
-      name: "{{ ['zsh'] + zsh_dependencies }}"
+      name: "{{ ['zsh'] }}"
       state: present
       update_cache: yes
     become: true

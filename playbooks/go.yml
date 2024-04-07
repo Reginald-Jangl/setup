@@ -1,5 +1,10 @@
 - hosts: localhost
   tasks:
+
+  - name: Include main vars
+    ansible.builtin.include_vars:
+      file: vars.yml
+
   - name: Create download directory
     ansible.builtin.file:
       state: directory
@@ -11,8 +16,8 @@
 
   - name: Download Go language SDK
     ansible.builtin.get_url:
-      url: 'https://storage.googleapis.com/golang/go{{ golang_version }}.linux-{{ golang_architecture }}.tar.gz'
-      dest: '~/.go/go{{ golang_version }}.linux-{{ golang_architecture }}.tar.gz'
+      url: 'https://go.dev/dl/go{{ go_version }}.linux-{{ go_architecture }}.tar.gz'
+      dest: '~/.go/go{{ go_version }}.linux-{{ go_architecture }}.tar.gz'
       force: false
       use_proxy: true
       validate_certs: true
@@ -48,7 +53,7 @@
   - name: Install Go language SDK
     become: true
     ansible.builtin.unarchive:
-      src: '~/.go/go{{ golang_version }}.linux-{{ golang_architecture }}.tar.gz'
+      src: '~/.go/go{{ go_version }}.linux-{{ go_architecture }}.tar.gz'
       remote_src: true
       extra_opts: '--strip-components=1'
       dest: '/usr/local/go'

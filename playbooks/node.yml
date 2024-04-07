@@ -1,31 +1,19 @@
 - hosts: localhost
   tasks:
 
-  - name: "Add nodejs apt key"
-    apt_key:
-      url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
-      state: present
-    tags:
-      - install
-      - node
+  - name: Include main vars
+    ansible.builtin.include_vars:
+      file: vars.yml
 
-  - name: Install the nodejs LTS repos
-    apt_repository:
-      repo: "deb https://deb.nodesource.com/node_{{ NODEJS_VERSION }}.x {{ ansible_distribution_release }} main"
-      state: present
-      update_cache: yes
-    tags:
-      - install
-      - node
+  - name: Update apt repo and cache  
+    apt: update_cache=yes force_apt_get=yes cache_valid_time=3600 # Update apt repository and cache
 
-  - name: "Install nodejs"
-    apt:
-      update_cache: yes
-      name: nodejs
-      state: present
-    tags:
-      - install
-      - node
+  - name: Install nodejs and npm 
+    apt:                        # Install Node.js and NPM
+      pkg:
+      - nodejs
+      - npm
+    ignore_errors: true
 
   - name: Install Yarn
     npm:

@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+(
+cd ~/setup/playbooks || exit
+sudo ansible-playbook "$1.yml"
+hash -r
+)
+
