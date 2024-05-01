@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+if [ $# -eq 0 ]
+    then
+        pushd ~/work/jangl-site/jangl-webleads || return
+        nvim .
+        popd || return
+    else
+        pushd ~/work/jangl-site/jangl-webleads/ || return
+        ./manage.py "$@"
+        popd || return
+    fi

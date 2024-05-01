@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+if [ $# -eq 0 ]
+    then
+        pushd ~/work/jangl-site/jangl-calls-api || return
+        nvim .
+        popd || return
+    else
+        pushd ~/work/jangl-site || return
+        site run jangl-calls-api command "$@"
+        popd || return
+    fi

@@ -1,7 +1,0 @@
-#!/usr/bin/env bash
-
-(
-cd ~/setup/playbooks
-ansible-playbook dev-env.yml
-hash -r
-)

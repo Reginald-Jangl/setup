@@ -142,3 +142,28 @@ export PATH="/usr/local/go/bin:$GOBIN:$PATH"
 export NVM_DIR="$HOME/.config/nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# Jangl
+export AWS_DEFAULT_REGION="us-east-1"
+export CFLAGS="-Qunused-arguments"
+export CPPFLAGS="-Qunused-arguments"
+export DOCKER_DEFAULT_PLATFORM="linux/amd64"
+export LC_ALL="en_US.utf-8"
+export LANG="en_US.utf-8"
+export PYTHONWARNINGS="ignore"
+
+export PATH=$PATH:$HOME/.jangl/bin
+
+alias site="./jangl-site"
+alias dc="docker compose"
+alias dcrun="docker compose run --rm --no-deps"
+
+function dclogs {
+    local dir=$(basename $(cd "$(dirname .)" && pwd))
+    local project=${1/%\//}
+    docker logs --tail=${2:-10} -f "${dir}-${project}-1"
+}
+
+alias dnsquery='dscacheutil -q host -a name'
+
+ssh-add ~/.ssh/jangl_prod &>/dev/null

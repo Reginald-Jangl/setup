@@ -1,0 +1,106 @@
+#!/usr/bin/env python
+
+import re
+import json
+import requests
+import argparse
+
+
+ANSWER_REGEX = r"(?P<slug>[a-z]+),(?P<name>[A-z]+)(,(?P<digit>\d))?"
+PROD_DOMAIN = "http://agent.mesos.service.dc1.consul:8008"
+
+
+def answer_validator(v):
+    if match := re.match(ANSWER_REGEX, v):
+        return match.groupdict()
+    raise argparse.ArgumentTypeError("invalid answer value")
+
+
+arg_parser = argparse.ArgumentParser()
+arg_parser.add_argument("-v", "--vertical", dest="vertical", required=True)
+arg_parser.add_argument("-n", "--name", dest="name", required=True)
+arg_parser.add_argument("-s", "--slug", dest="slug", required=True)
+arg_parser.add_argument(
+    "-a", "--answer", dest="answers", nargs="+", type=answer_validator
+)
+arg_parser.add_argument("-r", "--recording", dest="recording", required=False)
+arg_parser.add_argument("-d", "--domain", dest="domain", default=PROD_DOMAIN)
+arg_parser.add_argument(
+    "-dr", "--dryrun", dest="dryrun", default=False, action="store_true"
+)
+
+args = arg_parser.parse_args()
+
+if not args.answers:
+    print("missing answers")
+    exit()
+
+TOKEN_URL = f"{args.domain}/accounts/sites/1000001/get_user_token/"
+VARIABLE_URL = f"{args.domain}/calls/filters/variables/"
+QUESTION_URL = f"{args.domain}/calls/filters/questions/"
+
+
+def get_token():
+    response = requests.get(TOKEN_URL)
+    response.raise_for_status()
+    return response.json().get("token")
+
+
+TOKEN = get_token() if not args.dryrun else "<DRYRUN TOKEN HERE>"
+HEADERS = {"Authorization": f"JWT {TOKEN}"}
+
+
+def make_variable():
+    data = {
+        "vertical_id": args.vertical,
+        "name": args.name,
+        "slug": args.slug,
+        "values": [
+            {
+                "name": answer["name"],
+                "slug": answer["slug"],
+            }
+            for answer in args.answers
+        ],
+    }
+
+    if args.dryrun:
+        print("POST", VARIABLE_URL)
+        map(print, (f"{k}: {v}" for k, v in HEADERS))
+        print(json.dumps(data, indent=4, default=str))
+        return
+
+    response = requests.post(VARIABLE_URL, headers=HEADERS, json=data)
+    response.raise_for_status()
+
+
+make_variable()
+
+
+def make_question():
+    data = {
+        "vertical_id": args.vertical,
+        "name": args.name,
+        "recording_id": args.recording,
+        "hangup_id": None,
+        "answers": [
+            {
+                "button_press": answer["digit"],
+                "values": [{"variable": args.slug, "value": answer["slug"]}],
+            }
+            for answer in args.answers
+        ],
+    }
+
+    if args.dryrun:
+        print("POST", VARIABLE_URL)
+        map(print, (f"{k}: {v}" for k, v in HEADERS))
+        print(json.dumps(data, indent=4, default=str))
+        return
+
+    response = requests.post(QUESTION_URL, headers=HEADERS, json=data)
+    response.raise_for_status()
+
+
+if args.recording and all(answer["digit"] for answer in args.answers):
+    make_question()
