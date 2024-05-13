@@ -1,20 +1,11 @@
 - hosts: localhost
   tasks:
-  - name: Cloning fzf
-    ansible.builtin.git:
-      repo: 'https://github.com/junegunn/fzf.git'
-      dest: "{{ lookup('env', 'HOME') }}/.fzf"
-      recursive: yes
-      update: yes
-      accept_hostkey: yes
-      version: master
+  - name: Install fzf
+    community.general.homebrew:
+      name: fzf
+      state: present
     tags:
       - install
       - fzf
 
-  - name: Installing fzf 
-    shell: "~/.fzf/install --all"
-    tags:
-      - install
-      - fzf
 

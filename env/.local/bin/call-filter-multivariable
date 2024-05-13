@@ -6,14 +6,14 @@ import requests
 import argparse
 
 
-ANSWER_REGEX = r"(?P<slug>[a-z_]+):(?P<name>[A-z_ ]+)(\:(?P<digit>\d))?"
+ANSWER_REGEX = r"(?P<slug>[a-z]+),(?P<name>[A-z]+)(,(?P<digit>\d))?"
 PROD_DOMAIN = "http://agent.mesos.service.dc1.consul:8008"
 
 
 def answer_validator(v):
     if match := re.match(ANSWER_REGEX, v):
         return match.groupdict()
-    raise argparse.ArgumentTypeError(f"invalid answer value {v}")
+    raise argparse.ArgumentTypeError("invalid answer value")
 
 
 arg_parser = argparse.ArgumentParser()
@@ -104,3 +104,4 @@ def make_question():
 
 if args.recording and all(answer["digit"] for answer in args.answers):
     make_question()
+

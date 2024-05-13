@@ -7,6 +7,6 @@ if [ $# -eq 0 ]
         popd || return
     else
         pushd ~/work/jangl-site || return
-        site run jangl-calls-api command "$@"
+        ./jangl-site run jangl-calls-api command "$@"
         popd || return
     fi
