@@ -2,7 +2,7 @@
 
 (
 cd ~/setup/playbooks || exit
-sudo ansible-playbook "$1.yml"
+sudo ansible-playbook "{$1:dev-env}.yml"
 hash -r
 )
 
