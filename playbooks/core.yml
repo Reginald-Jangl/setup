@@ -7,7 +7,7 @@
 
   - name: "Install required software"
     become: true
-    apt:
+    package:
       name: "{{ packages }}"
       state: present
     vars:

@@ -19,7 +19,7 @@
 
   - name: "Install neovim deps"
     become: true
-    apt:
+    package:
       name: "{{ packages }}"
       state: present
     vars:

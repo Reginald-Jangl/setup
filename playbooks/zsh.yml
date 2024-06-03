@@ -5,7 +5,7 @@
       file: vars.yml
 
   - name: Ensure Zsh with dependencies are installed
-    apt:
+    package:
       name: "{{ ['zsh'] }}"
       state: present
       update_cache: yes
