@@ -27,7 +27,7 @@
       - go
 
   - name: Create Go language SDK installation directory
-    become: true
+    become: "{{ should_be_root }}"
     ansible.builtin.file:
       state: directory
       owner: root
@@ -39,7 +39,7 @@
       - go
 
   - name: Install unarchive dependencies (zypper)
-    become: true
+    become: "{{ should_be_root }}"
     ansible.builtin.package:
       name:
         - gzip
@@ -51,7 +51,7 @@
       - go
 
   - name: Install Go language SDK
-    become: true
+    become: "{{ should_be_root }}"
     ansible.builtin.unarchive:
       src: '~/.go/go{{ go_version }}.linux-{{ go_architecture }}.tar.gz'
       remote_src: true

@@ -9,13 +9,13 @@
       name: "{{ ['zsh'] }}"
       state: present
       update_cache: yes
-    become: true
+    become: "{{ should_be_root }}"
 
   - name: Ensure zsh is the default shell
     user:
       name: "{{ username }}"
       shell: "/usr/bin/zsh"
-    become: true
+    become: "{{ should_be_root }}"
 
   - name: Download Oh My Zsh installation script
     get_url:
@@ -30,5 +30,5 @@
   
   # This is another one of the items i cannot seem to figure out.  I am using root but i am not getting this to change forever...
   - name: sets default shell to zsh
-    become: true
+    become: "{{ should_be_root }}"
     ansible.builtin.command: chsh -s /usr/bin/zsh

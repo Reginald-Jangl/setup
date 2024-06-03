@@ -5,7 +5,7 @@
         file: vars.yml
 
     - name: installing tmux
-      become: true
+      become: "{{ should_be_root }}"
       package:
         name: tmux
         state: present

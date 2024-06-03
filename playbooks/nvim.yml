@@ -18,7 +18,7 @@
        version: stable
 
   - name: "Install neovim deps"
-    become: true
+    become: "{{ should_be_root }}"
     package:
       name: "{{ packages }}"
       state: present

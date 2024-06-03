@@ -7,3 +7,5 @@ personal: "{{ home }}/personal"
 go_version: "1.22.2"
 go_architecture: "amd64"
 nodejs_version: "20.12.1"
+should_be_root: "{{ true if ansible_pkg_mgr != 'brew' else false }}"
+
