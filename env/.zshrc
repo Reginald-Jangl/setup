@@ -157,7 +157,6 @@ export PYTHONWARNINGS="ignore"
 
 export PATH=$PATH:$HOME/.jangl/bin
 
-alias site="./jangl-site"
 alias dc="docker compose"
 alias dcrun="docker compose run --rm --no-deps"
 
