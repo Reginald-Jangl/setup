@@ -144,6 +144,9 @@ export NVM_DIR="$HOME/.config/nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # Jangl
+export JANGL_SITE="$HOME/work/jangl-site/"
+export JANGL_CALLS="$JANGL_SITE/jangl-calls-api/"
+
 export AWS_DEFAULT_REGION="us-east-1"
 export CFLAGS="-Qunused-arguments"
 export CPPFLAGS="-Qunused-arguments"
