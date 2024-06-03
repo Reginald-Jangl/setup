@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+pushd "$JANGL_SITE" || return
+./jangl-site "$@"
+popd || return
+
+
