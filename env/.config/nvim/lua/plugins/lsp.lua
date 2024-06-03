@@ -3,7 +3,19 @@ return {
   dependencies = {
     "williamboman/mason.nvim",
     "williamboman/mason-lspconfig.nvim",
-    "WhoIsSethDaniel/mason-tool-installer.nvim",
+    {
+      "hrsh7th/nvim-cmp",
+      dependencies = {
+        { "hrsh7th/cmp-buffer" },
+        { "hrsh7th/cmp-path" },
+        { "hrsh7th/cmp-nvim-lua" },
+        { "hrsh7th/cmp-nvim-lsp" },
+        { "onsails/lspkind-nvim" },
+        { "saadparwaiz1/cmp_luasnip", dependencies = { "L3MON4D3/LuaSnip" } },
+        { "tamago324/cmp-zsh" },
+      }
+    },
+
     "jose-elias-alvarez/nvim-lsp-ts-utils",
     "b0o/schemastore.nvim",
     "j-hui/fidget.nvim",
@@ -11,7 +23,7 @@ return {
   config = function()
     -- LSP Keymap
     vim.api.nvim_create_autocmd("LspAttach", {
-      group = vim.api.nvim_create_augroup("kickstart-lsp-attach", { clear = true }),
+      group = vim.api.nvim_create_augroup("lsp-attach", { clear = true }),
       callback = function(event)
         local map = function(keys, func, desc)
           vim.keymap.set("n", keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
@@ -30,10 +42,15 @@ return {
       end,
     })
 
-    local capabilities = vim.lsp.protocol.make_client_capabilities()
-    capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
+    local cmp = require('cmp')
+    local cmp_lsp = require("cmp_nvim_lsp")
+    local capabilities = vim.tbl_deep_extend(
+      "force",
+      {},
+      vim.lsp.protocol.make_client_capabilities(),
+      cmp_lsp.default_capabilities()
+    )
 
-    local ts_util = require "nvim-lsp-ts-utils"
     local servers = {
       bashls = true,
       lua_ls = {
@@ -79,7 +96,7 @@ return {
         }
       },
       tsserver = {
-        init_options = ts_util.init_options,
+        init_options = require "nvim-lsp-ts-utils",
         cmd = { "typescript-language-server", "--stdio" },
         filetypes = {
           "javascript",
@@ -116,25 +133,66 @@ return {
       },
     }
 
+    require("fidget").setup({})
     require("mason").setup()
 
     local ensure_installed = vim.tbl_keys(servers or {})
-    vim.list_extend(ensure_installed, {
-      "lua_ls", "jsonls"
-    })
-    require("mason-tool-installer").setup { ensure_installed = ensure_installed }
+    vim.list_extend(ensure_installed, { "lua_ls", "jsonls" })
 
-    require("mason-lspconfig").setup {
+    require("mason-lspconfig").setup({
+      ensure_installed = ensure_installed,
       handlers = {
-        function(server_name)
-          local server = servers[server_name] or {}
-          if type(server) ~= "table" then server = {} end
-          server = vim.tbl_deep_extend("force", {
-            capabilities = server.capabilities or {}
-          }, server)
-          require("lspconfig")[server_name].setup(server)
+        function(server_name)                             -- handle everything here
+          local server = servers[server_name] or {}       -- grab the server or empty table
+          if type(server) ~= "table" then server = {} end -- if the server is not a table then make it an empty table
+          require("lspconfig")[server_name].setup(server) -- setup the server
         end,
       },
+    })
+
+    cmp.setup {
+      snippet = {
+        expand = function(args)
+          luasnip.lsp_expand(args.body)
+        end,
+      },
+      -- completion = { completeopt = "menu,menuone,noinsert" },
+      mapping = cmp.mapping.preset.insert {
+        ["<C-n>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
+        ["<C-p>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
+        ["<C-y>"] = cmp.mapping.confirm { select = true },
+        ["<C-Space>"] = cmp.mapping.complete {},
+        -- ["<C-l>"] = cmp.mapping(function()
+        --   if luasnip.expand_or_locally_jumpable() then
+        --     luasnip.expand_or_jump()
+        --   end
+        -- end, { "i", "s" }),
+        -- ["<C-h>"] = cmp.mapping(function()
+        --   if luasnip.locally_jumpable(-1) then
+        --     luasnip.jump(-1)
+        --   end
+        -- end, { "i", "s" }),
+      },
+      sources = cmp.config.sources({
+        { name = "nvim_lsp" },
+        { name = "luasnip" },
+
+      }, {
+        { name = 'buffer' }
+      })
     }
+
+
+    vim.diagnostic.config({
+      update_in_insert = true,
+      float = {
+        focusable = false,
+        style = 'minimal',
+        border = 'rounded',
+        source = 'always',
+        header = '',
+        prefix = '',
+      }
+    })
   end,
 }

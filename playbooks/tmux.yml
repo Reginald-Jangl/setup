@@ -5,8 +5,8 @@
         file: vars.yml
 
     - name: installing tmux
-      become: true
-      apt:
+      become: "{{ should_be_root }}"
+      package:
         name: tmux
         state: present
         update_cache: yes
