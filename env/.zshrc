@@ -103,9 +103,6 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-export STOW_FOLDERS="bin,i3,jangl,nvim,tmux,zsh"
-
-[ -f ~/.jangl_profile ] && source ~/.jangl_profile
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 export XDG_CONFIG_HOME=$HOME/.config

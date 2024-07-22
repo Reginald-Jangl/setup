@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+ 
+if [[ -f $(pwd)/Pipfile ]]; then
+	pipenv run nvim "$@" 
+else
+	nvim "$@"
+fi
