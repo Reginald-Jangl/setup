@@ -6,7 +6,6 @@
       file: vars.yml
 
   - name: "Install required software"
-    become: "{{ should_be_root }}"
     package:
       name: "{{ packages }}"
       state: present
@@ -18,13 +17,11 @@
       - python3-pip
 
   - name: Ensure group "docker" exists with correct gid
-    become: "{{ should_be_root }}"
     ansible.builtin.group:
       name: docker
       state: present
 
   - name: Add user to docker group
-    become: "{{ should_be_root }}"
     ansible.builtin.user:
       name: "{{ username }}"
       groups: docker

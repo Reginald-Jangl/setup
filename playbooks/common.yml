@@ -1,7 +1,6 @@
 - hosts: localhost
   tasks:
   - name: "Install all the software"
-    become: "{{ should_be_root }}"
     package:
       name: "{{ packages }}"
       state: present
