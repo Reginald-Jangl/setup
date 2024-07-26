@@ -108,7 +108,6 @@ source $ZSH/oh-my-zsh.sh
 export XDG_CONFIG_HOME=$HOME/.config
 
 VIM="nvim"
-alias vim='nvim'
 
 export GIT_EDITOR=$VIM
 export DOTFILES=$HOME/.dotfiles

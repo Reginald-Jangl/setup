@@ -1,4 +1,5 @@
 - hosts: localhost
+  connection: local
   tasks:
     - name: Include main vars
       ansible.builtin.include_vars:
@@ -6,8 +7,10 @@
 
     - name: Copy dev env
       ansible.builtin.copy:
-        src: ../env/
+        src: "../env/"
         dest: "{{ home }}"
         owner: "{{ username }}"
         group: "{{ username }}"
-        mode: '0755'
+        mode: "0755"
+
+

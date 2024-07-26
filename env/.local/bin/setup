@@ -1,8 +1,15 @@
 #!/usr/bin/env bash
 
 (
-cd ~/setup/playbooks || exit
-sudo ansible-playbook "${1:-dev-env}.yml"
-hash -r
+cd ~/setup/playbooks || exit;
+
+if [[ -f "./$1.yml" ]]; then
+	PLAYBOOK="$1.yml"
+	shift;
+else
+	PLAYBOOK="dev-env.yml"
+fi;
+
+ansible-playbook "$PLAYBOOK" "$@"
 )
 

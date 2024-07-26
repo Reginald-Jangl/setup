@@ -5,8 +5,13 @@
         file: vars.yml
 
     - name: installing tmux
-      become: "{{ should_be_root }}"
+      become: true
       package:
         name: tmux
         state: present
         update_cache: yes
+
+    - name: install tpm
+      ansible.builtin.git:
+        repo: "https://github.com/tmux-plugins/tpm" 
+        dest: "{{ home }}/.tmux/plugins/tpm"
