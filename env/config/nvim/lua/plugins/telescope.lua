@@ -1,5 +1,5 @@
 return {
-{ -- Fuzzy Finder (files, lsp, etc)
+  { -- Fuzzy Finder (files, lsp, etc)
     'nvim-telescope/telescope.nvim',
     event = 'VeryLazy',
     branch = '0.1.x',
@@ -62,6 +62,11 @@ return {
             require('telescope.themes').get_dropdown(),
           },
         },
+        pickers = {
+          find_files = {
+            hidden = true
+          }
+        }
       }
 
       -- Enable telescope extensions, if they are installed
