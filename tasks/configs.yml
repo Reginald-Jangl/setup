@@ -1,0 +1,7 @@
+- name: Copy dev env
+  ansible.builtin.copy:
+    src: "../env/"
+    dest: "{{ home }}"
+    owner: "{{ username }}"
+    mode: "0755"
+
