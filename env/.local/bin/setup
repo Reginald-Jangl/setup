@@ -1,15 +1,24 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 (
-cd ~/setup/playbooks || exit;
+SETUP_DIR="${SETUP_DIR:-"$HOME/setup"}"
+echo "$SETUP_DIR"
+cd "$SETUP_DIR" || exit;
 
-if [[ -f "./$1.yml" ]]; then
-	PLAYBOOK="$1.yml"
-	shift;
-else
-	PLAYBOOK="dev-env.yml"
-fi;
+TAGS=()
+ARGS=()
 
-ansible-playbook "$PLAYBOOK" "$@"
+while [[ $# -gt 0 ]]; do
+	if [[ -f $SETUP_DIR/tasks/$1.yml ]]; then
+		TAGS+=("$1")
+	else
+		ARGS+=("$1")
+	fi
+	shift
+done
+
+echo ansible-playbook main.yml ${TAGS:+--tags $(echo "${TAGS[@]}" | sed 's/ /,/g')} $(echo "${ARGS[@]}")
+ansible-playbook main.yml ${TAGS:+--tags $(echo "${TAGS[@]}" | sed 's/ /,/g')} $(echo "${ARGS[@]}")
+
+hash -r
 )
-
