@@ -1,0 +1,84 @@
+---
+- name: Setup!
+  hosts: localhost
+
+  vars_files:
+    - config.yml
+
+  pre_tasks:
+    - name: Include main playbook configuration.
+      ansible.builtin.include_vars: "{{ item }}"
+      with_fileglob:
+        - "{{ playbook_dir }}/config.yml"
+      tags: ["always"]
+
+  # roles:
+  #
+  tasks:
+    - name: Include apt packages task configuration.
+      ansible.builtin.import_tasks:
+        file: tasks/apt.yml
+      tags: ["apt",]
+
+    - name: Include flatpak packages task configuration.
+      ansible.builtin.import_tasks:
+        file: tasks/flatpak.yml
+      tags: ["flatpak",]
+
+    - name: Include fonts task config
+      ansible.builtin.import_tasks:
+        file: tasks/fonts.yml
+      tags: ["fonts",]
+
+    - name: Include ssh task config
+      ansible.builtin.import_tasks:
+        file: tasks/ssh.yml
+      tags: ["ssh",]
+
+    - name: Include git task config
+      ansible.builtin.import_tasks:
+        file: tasks/git.yml
+      tags: ["git",]
+
+    - name: Include docker task config
+      ansible.builtin.import_tasks:
+        file: tasks/docker.yml
+      tags: ["docker",]
+
+    - name: Include zsh task config
+      ansible.builtin.import_tasks:
+        file: tasks/zsh.yml
+      tags: ["zsh",]
+
+    - name: Include fzf task config
+      ansible.builtin.import_tasks:
+        file: tasks/fzf.yml
+      tags: ["fzf",]
+
+    - name: Include nvim task config
+      ansible.builtin.import_tasks:
+        file: tasks/nvim.yml
+      tags: ["nvim",]
+
+    - name: Include configs task config
+      ansible.builtin.import_tasks:
+        file: tasks/configs.yml
+      tags: ["configs",]
+
+    # Programming Languages
+    - name: Include go task config
+      ansible.builtin.import_tasks:
+        file: tasks/go.yml
+      tags: ["go", "programming"]
+
+    - name: Include node task config
+      ansible.builtin.import_tasks:
+        file: tasks/node.yml
+      tags: ["node", "programming"]
+
+    - name: Include rust task config
+      ansible.builtin.import_tasks:
+        file: tasks/rust.yml
+      tags: ["rust", "programming"]
+
+

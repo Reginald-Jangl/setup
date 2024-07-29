@@ -1,0 +1,11 @@
+- name: Copy dev env
+  ansible.builtin.copy:
+    src: "../env/{{ item }}"
+    dest: "{{ home }}/.{{ item }}"
+    owner: "{{ username }}"
+    mode: "0755"
+  loop:
+    - config
+    - local
+    - zshrc
+
