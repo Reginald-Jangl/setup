@@ -10,7 +10,7 @@ home: "{{ lookup('ansible.builtin.env', 'HOME') }}"
 config: "{{ lookup('ansible.builtin.env', 'XDG_CONFIG') }}"
 
 # Git Config
-email: "reginaldbeakes@gmail.com"
+email: "rbeakes@jangl.com"
 
 # SSH Config
 ssh_key_filename: "id_rsa"
