@@ -1,0 +1,58 @@
+---
+- name: Create download directory
+  ansible.builtin.file:
+    state: directory
+    mode: 'u=rwx,go=rx'
+    dest: '~/.go/'
+  tags:
+    - install
+    - go
+
+- name: Download Go language SDK
+  ansible.builtin.get_url:
+    url: 'https://go.dev/dl/go{{ go_version }}.linux-{{ go_architecture }}.tar.gz'
+    dest: '~/.go/go{{ go_version }}.linux-{{ go_architecture }}.tar.gz'
+    force: false
+    use_proxy: true
+    validate_certs: true
+    mode: 'u=rw,go=r'
+  tags:
+    - install
+    - go
+
+- name: Create Go language SDK installation directory
+  ansible.builtin.file:
+    state: directory
+    owner: root
+    group: root
+    mode: 'u=rwx,go=rx'
+    dest: '/usr/local/go'
+  tags:
+    - install
+    - go
+
+- name: Install unarchive dependencies (zypper)
+  ansible.builtin.package:
+    name:
+      - gzip
+      - tar
+    state: present
+  when: ansible_facts.pkg_mgr == 'zypper' and not ansible_check_mode
+  tags:
+    - install
+    - go
+
+- name: Install Go language SDK
+  ansible.builtin.unarchive:
+    src: '~/.go/go{{ go_version }}.linux-{{ go_architecture }}.tar.gz'
+    remote_src: true
+    extra_opts: '--strip-components=1'
+    dest: '/usr/local/go'
+    owner: root
+    group: root
+    creates: '/usr/local/go/bin'
+  when: not ansible_check_mode
+  tags:
+    - install
+    - go
+

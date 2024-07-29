@@ -1,0 +1,24 @@
+#!/bin/bash
+
+(
+SETUP_DIR="${SETUP_DIR:-"$HOME/setup"}"
+echo "$SETUP_DIR"
+cd "$SETUP_DIR" || exit;
+
+TAGS=()
+ARGS=()
+
+while [[ $# -gt 0 ]]; do
+	if [[ -f $SETUP_DIR/tasks/$1.yml ]]; then
+		TAGS+=("$1")
+	else
+		ARGS+=("$1")
+	fi
+	shift
+done
+
+echo ansible-playbook main.yml ${TAGS:+--tags $(echo "${TAGS[@]}" | sed 's/ /,/g')} $(echo "${ARGS[@]}")
+ansible-playbook main.yml ${TAGS:+--tags $(echo "${TAGS[@]}" | sed 's/ /,/g')} $(echo "${ARGS[@]}")
+
+hash -r
+)

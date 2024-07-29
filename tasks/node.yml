@@ -1,0 +1,52 @@
+---
+- name: Update package repo and cache  
+  package: update_cache=yes force_apt_get=yes cache_valid_time=3600 # Update apt repository and cache
+
+- name: Install nodejs and npm 
+  package:                        # Install Node.js and NPM
+    pkg:
+    - nodejs
+    - npm
+  ignore_errors: true
+
+- name: Install Yarn
+  npm:
+    name: yarn
+    global: yes
+  tags:
+    - install
+    - node
+
+- name: Install eslint
+  npm:
+    name: eslint
+    global: yes
+  tags:
+    - install
+    - node
+
+- name: Install Typescript server
+  npm:
+    name: typescript-language-server
+    global: yes
+  tags:
+    - install
+    - node
+
+- name: Install Typescript
+  npm:
+    name: typescript
+    global: yes
+  tags:
+    - install
+    - node
+
+- name: Install TS-Node
+  npm:
+    name: ts-node
+    global: yes
+  tags:
+    - install
+    - node
+
+

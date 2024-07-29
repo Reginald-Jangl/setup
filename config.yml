@@ -1,0 +1,61 @@
+
+---
+# System settings
+
+# User settings
+
+# Set user to be used for configuration
+username: "{{ lookup('env', 'USER') }}"
+home: "{{ lookup('ansible.builtin.env', 'HOME') }}"
+config: "{{ lookup('ansible.builtin.env', 'XDG_CONFIG') }}"
+
+# Git Config
+email: "reginaldbeakes@gmail.com"
+
+# SSH Config
+ssh_key_filename: "id_rsa"
+
+# Create custom directories
+# create_directories: true
+# directories:
+#   - $HOME/Documents/repositories/
+
+# Install Nerd Fonts
+install_fonts: true
+installed_nerdfonts:
+  # - Meslo
+  - Hack
+
+# Install and configure zsh
+# configure_zsh: true
+# Plugin names have to be in the format github_user/plugin_name
+# zsh_plugins:
+#   - zsh-users/zsh-syntax-highlighting
+#   - zsh-users/zsh-history-substring-search
+
+# Theme names have to be in the format github_user/theme_name
+# zsh_themes:
+#   - romkatv/powerlevel10k
+
+# Application packages
+# apt_repositories:
+packages:
+  - ripgrep
+  - xclip
+  - jq
+  - tldr
+
+# Install flatpak and listed packages
+install_flatpak: true
+flatpak_packages:
+  - io.gitlab.librewolf-community
+
+# Programming
+
+# GO
+go_version: "1.22.2"
+go_architecture: "amd64"
+
+# Node
+nodejs_version: "20.12.1"
+
